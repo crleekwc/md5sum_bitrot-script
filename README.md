@@ -32,7 +32,7 @@ function check_all {
 	value=$(($value + $?))
 	
 	# check <path to library> <path to log directory>
-  # value=$(($value + $?))
+  	# value=$(($value + $?))
 	
 	
 	if [ $value -gt 0 ]
