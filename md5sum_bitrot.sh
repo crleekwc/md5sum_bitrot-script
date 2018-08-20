@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 ##############################################################
-# Script name	: md5sum_rysnc
+# Script name	: md5sum_bitrot
 # Date created	: August 17th, 2018
-# Date Modified	: Auguest 17th, 2018
+# Date Modified	: Auguest 20th, 2018
 # Description	: 1) check if a md5 library exists
 #		  2) creates a new md5 library give a root path and path to save the library
 #		  3) checks the hash library for hashes that don't match or missing files, 
@@ -15,30 +15,24 @@
 # Email		: christopher.lee@tsc.com
 # 
 # Notes		: All paths to directories must end with a "/"
-#		  All paths to files must not with "/"
+#		  All paths to files must NOT with "/"
 # 		  Functions return 0 if there are no issues, and return 2 if there are errors to investigate
 #
-# freebsd version of this
-# stat -f %Sm -t %F" "%R $1 >> $1.md5
-# 
-# Ubuntu Version
-# stat -c %y "$1" >> .md5/$1.md5
 #
 ###
 
+# Config
 log_dir=./log/
 
-# Checks if the library checks if library files exist if no library files exists executes code
+# Checks if library files exist, if no library files exists executes code
 # arguments:
 # $1 path to library files
 function init_library {
 	ls "$1"*.md5 >> /dev/null 2>&1
 	if [ $? -eq 2 ]
         then
-		# This is where you set which directories you want to monitor for bit rot
-		# and where you set the where the libraries for the md5 hashes are stored.
-                create_library ./ "$1"test.md5
-        fi
+        	create_libraries "$log_dir"
+	fi
 
         return 0	
 }
@@ -84,8 +78,8 @@ function check_hashes {
 		if [ $not_match -gt 0 ]
                 then    
 			echo "Hashes do NOT match:" >> "$2"error.log
-			echo "$state" | grep -i "FAILED" | grep -v "FAILED open or read" >> "$2"error.log
-                        echo "$state" | grep -i "FAILED" | grep -v "FAILED open or read" | cut -d: -f1 > "$2"temp_failed_"$library_name"
+			echo "$state" | grep "FAILED" | grep -v "FAILED open or read" >> "$2"error.log
+                        echo "$state" | grep "FAILED" | grep -v "FAILED open or read" | cut -d: -f1 > "$2"temp_failed_"$library_name"
                         value=2
                 fi
 		
@@ -111,6 +105,7 @@ function check_timestamp {
 		while IFS=$'\n' read -r file
 		do
 			echo "checking $file"
+
 			if [ $library -nt $file ];
 			then
 				echo >> "$2"error.log
@@ -127,6 +122,9 @@ function check_timestamp {
 				fi
 			fi	
 		done < $input
+	else
+		echo "Library NOT FOUND: $library" >> "$2"error.log
+		value=2
 	fi
 
 	return $value
@@ -146,5 +144,53 @@ function check {
 	return $?
 }
 
+# Run check on all of the directories that are to be monitored. Just keep adding the checks to this function
+# for ever directory you created a library for then add the return values with the current value. Check_all
+# will check to see if the value is greater than 0 and return either a 0 if there are no issues, or a 2 if
+# there are issues.
+function check_all {
+	value=0
+	check "$log_dir"test.md5 "$log_dir"
+	value=$(($value + $?))
+	
+	# check "$log_dir"test.md5 "$log_dir"
+        # value=$(($value + $?))
+	
+	
+	if [ $value -gt 0 ]
+	then
+		value=2
+	fi
+	
+	return $value
+}
+
+# Creates all of the libraries. Just keep adding the create_library function with the root directory you want
+# create the library for and the name of the library file. Function returns a 0 when there are no issues and
+# a 2 if there are issues.
+function create_libraries {
+	value=0
+	create_library ./ "$1"test.md5
+	value=$(($value + $?))
+	
+	# create_library ./ "$1"test.md5
+	# value=$(($value + $?))
+	
+	if [ $value -gt 0 ]
+        then
+                value=2
+        fi
+
+        return $value
+}
+
 init_library "$log_dir"
-check "$log_dir"test.md5 "$log_dir"
+check_all
+if [ $? -eq 0 ]
+then
+	create_libraries "$log_dir"
+	# Run rysnc
+else
+	echo "Bitrot found check error.log"
+	# Send email notifying administrator
+fi
