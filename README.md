@@ -63,4 +63,4 @@ function create_libraries {
         return $value
 }
 ```
-Create_libraries needs to know which directories to monitor and where the path to library will be. To add more directories you want to monitor just add them like the commented code above, first you would add the create_library function followed by at return tally.
+Create_libraries needs to know which directories to monitor and where the path to library will be. To add more directories you want to monitor just add them like the commented code above, first you would add the create_library function followed by the value tally.
