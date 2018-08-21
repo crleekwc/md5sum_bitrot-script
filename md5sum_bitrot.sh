@@ -184,6 +184,8 @@ function create_libraries {
         return $value
 }
 
+# Below is an example on how to use the script, if you source the file in a another script remove all the 
+# lines below this comment.
 init_library "$log_dir"
 check_all
 if [ $? -eq 0 ]
