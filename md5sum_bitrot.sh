@@ -191,8 +191,7 @@ check_all
 if [ $? -eq 0 ]
 then
 	create_libraries "$log_dir"
-	# Run rysnc
+	# Run rysnc, this is where you would write the command to run rsync.
 else
-	echo "Bitrot found check error.log"
-	# Send email notifying administrator
+	# Send email notifying administrator, this is where you would write the command to send an email.
 fi
