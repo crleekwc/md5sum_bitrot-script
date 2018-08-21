@@ -17,9 +17,9 @@ check_all
 if [ $? -eq 0 ]
 then
 	create_libraries "$log_dir"
-	# Run rysnc
+	# Run rysnc, this is where you would write the command to run rsync.
 else
-	# Send email notifying administrator
+	# Send email notifying administrator, this is where you would write the command to send an email.
 fi
 ```
 In this example I create a variable called log_dir to be the desired log directory at the top of the script file. Then I run the init_library function by giving $log_dir as an argument. Then I run a check on all of the libraries I am using, and finally if there are no issues the libraries are refreshed and rsync can finally run. If there are issues it will send an email to the administrator. At this point the admin would check the error.log file to find out which file has bit rot.  
