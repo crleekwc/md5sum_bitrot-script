@@ -130,7 +130,7 @@ function check_timestamp {
 	return $value
 }
 
-# Perform an overall check of the of the hashes if it finds mis-matched file hashes, it runs check_timestamp
+# Perform an overall check of the hashes if it finds mis-matched file hashes, and it runs check_timestamp
 # and returns 0 if there are no issues. If function returns 2 bit rot was found.
 # arguments:
 # $1 path to library file
