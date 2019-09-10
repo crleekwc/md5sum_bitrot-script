@@ -1,8 +1,8 @@
 # md5sum_bitrot-script
 
-This script creates md5 hash libraries of the file trees you specify. Runs a check on the files contained in those files trees and prints in an error log any files it finds a mis-matched hash for. After it checks to see if the file has been modified by the user or if bit rot occurred.  
+This script creates md5 hash libraries of the file trees you specify. Runs a check on the files contained in those files trees and prints in an error log of any files it finds a mis-matched hash for. The script checks to see if the file has been modified by the user or if bit rot occurred.  
 
-There are two assumptions being made, with this script. The first assumption is that any file that has a mis-matched hash AND has a newer modification date than the library file is considered updated, which means that we are assuming the file has been intentionally changed by the user. The second assumption is that any files that have a mis-matched hash AND is older than the library is considered to have bit rot.
+There are two assumptions being made, with this script. The first assumption is that any file that has a mis-matched hash AND has a newer modification date than the library file is considered "updated", which means that we are assuming the file has been intentionally changed by the user. The second assumption is that any files that have a mis-matched hash AND is older than the library is considered to have bit rot.
 
 ### Usage:
 Below is an example on how to use the functions in the script. 
