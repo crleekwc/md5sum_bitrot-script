@@ -7,7 +7,7 @@
 # Description	: 1) check if a md5 library exists
 #		  2) creates a new md5 library give a root path and path to save the library
 #		  3) checks the hash library for hashes that don't match or missing files, 
-#		     then stores the repective file pathes in temp logs
+#		     then stores the respective file paths in temp logs
 #		  4) check timestamp of each file where the hash doesn't match against the timestamp 
 # 	 	     against the timestamp of the library file
 # 
